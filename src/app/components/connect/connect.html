@@ -1,0 +1,41 @@
+<div class="connect-wrapper">
+  <div class="connect-card glass">
+    <h1>Vínculo de Pareja 💙</h1>
+    <p class="subtitle">Conéctate para empezar a crear planes juntos</p>
+
+    <div class="sections-container">
+      
+      <div class="action-box">
+        <h3>Opción 1: Generar código</h3>
+        <p>Dale este código a tu pareja para que lo introduzca en su cuenta.</p>
+        
+        @if (!generatedCode) {
+          <button class="btn-electric" (click)="generateNewCode()">Generar Nuevo Código</button>
+        } @else {
+          <div class="code-display">
+            <span class="code">{{ generatedCode }}</span>
+            <div class="loader-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <p class="waiting-text">Esperando a que tu pareja se conecte...</p>
+          </div>
+        }
+      </div>
+
+      <div class="divider"><span>O</span></div>
+
+      <div class="action-box">
+        <h3>Opción 2: Tengo un código</h3>
+        <p>Introduce el código que ha generado tu pareja.</p>
+        
+        <div class="input-group">
+          <input type="text" [(ngModel)]="invitationCode" placeholder="Ej: A1B2C3" maxlength="10">
+          <button class="btn-outline" (click)="vincularPareja()" [disabled]="!invitationCode">
+            Conectar ahora
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

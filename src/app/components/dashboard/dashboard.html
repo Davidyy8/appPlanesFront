@@ -1,0 +1,96 @@
+<div class="dashboard-wrapper">
+  <header class="dashboard-header">
+    <div class="header-content">
+      <h1>Nuestros Planes <span>💙</span></h1>
+      <p>Creando recuerdos juntos</p>
+    </div>
+  </header>
+
+  <main class="dashboard-main">
+    
+    <section class="add-plan-section">
+      <div class="glass-card">
+        <h3>✨ Nuevo Plan</h3>
+        <div class="form-group">
+          <input 
+            type="text" 
+            [(ngModel)]="nuevoPlan.title" 
+            placeholder="¿Qué vamos a hacer?"
+            class="input-title">
+          
+          <textarea 
+            [(ngModel)]="nuevoPlan.description" 
+            placeholder="Añade detalles o una fecha..."
+            class="input-desc"></textarea>
+          
+          <button 
+            class="btn-electric" 
+            (click)="crearPlan()" 
+            [disabled]="!nuevoPlan.title.trim()">
+            Proponer Plan
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="plans-list-section">
+      <div class="list-container">
+        
+        @for (plan of planes; track plan.id) {
+          <div class="plan-row-card" [class.is-done]="plan.is_completed">
+            
+            <div class="plan-content">
+              <div class="title-group">
+                <span class="status-dot" [class.completed]="plan.is_completed"></span>
+                <h4>{{ plan.title }}</h4>
+              </div>
+              <p>{{ plan.description || 'Sin descripción adicional' }}</p>
+            </div>
+
+            <div class="plan-actions">
+              
+              @if (!plan.is_completed) {
+                <div class="upload-controls">
+                  <label [for]="'file-' + plan.id" class="btn-outline-photo">
+                    {{ selectedFile ? '✅ Foto lista' : '📸 Foto' }}
+                  </label>
+                  <input 
+                    [id]="'file-' + plan.id" 
+                    type="file" 
+                    (change)="onFileSelected($event)" 
+                    accept="image/*" 
+                    hidden>
+                  
+                  <button 
+                    class="btn-finish" 
+                    (click)="completarPlan(plan.id)"
+                    [disabled]="!selectedFile">
+                    Finalizar
+                  </button>
+
+                  <!-- <button 
+                    class="btn-delete-mini" 
+                    (click)="eliminarPlan(plan.id)" 
+                    title="Eliminar plan">
+                    🗑️
+                  </button> -->
+                </div>
+              } @else {
+                <div class="mini-photo">
+                  <img [src]="plan.image_url" alt="Recuerdo">
+                </div>
+              }
+
+            </div>
+          </div>
+        } @empty {
+          <div class="empty-state">
+            <p>No hay planes pendientes. ¡Propón algo divertido arriba! 🚀</p>
+          </div>
+        }
+
+      </div>
+    </section>
+
+  </main>
+</div>

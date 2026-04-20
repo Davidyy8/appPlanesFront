@@ -1,0 +1,125 @@
+/* Contenedor principal que ocupa toda la pantalla */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  /* Fondo con un degradado pastel muy suave */
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* La tarjeta blanca central */
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 3rem 2.5rem;
+  border-radius: 24px;
+  /* Sombra suave con un toque del azul eléctrico */
+  box-shadow: 0 10px 30px rgba(61, 90, 254, 0.15);
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  /* Animación de entrada */
+  animation: fadeInUp 0.6s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Título "Iniciar Sesión" en Azul Eléctrico */
+h2 {
+  color: #3d5afe; /* Azul Eléctrico */
+  font-weight: 800;
+  font-size: 2rem;
+  margin-top: 0;
+  margin-bottom: 2rem;
+  letter-spacing: -1px;
+}
+
+/* Contenedor de los inputs para darles espacio */
+.input-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+/* Estilo para los campos de texto */
+input {
+  width: 100%;
+  padding: 14px 18px;
+  margin: 10px 0;
+  border: 2px solid #e8eaf6; /* Fondo azul pastel muy suave */
+  border-radius: 14px;
+  font-size: 1rem;
+  /* Transición suave para el foco */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box; /* Importante para que el padding no agrande el input */
+  background-color: #fcfcff;
+}
+
+/* Efecto al hacer clic en el input (foco) */
+input:focus {
+  outline: none;
+  border-color: #3d5afe; /* Azul Eléctrico */
+  background-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(61, 90, 254, 0.1);
+}
+
+/* Botón "Entrar" Principal */
+button.btn-primary {
+  width: 100%;
+  background-color: #3d5afe; /* Azul Eléctrico */
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  /* Transición para el hover */
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(61, 90, 254, 0.2);
+}
+
+/* Efecto hover del botón */
+button.btn-primary:hover {
+  background-color: #2a4bff; /* Un azul un poco más oscuro */
+  transform: translateY(-2px);
+  box-shadow: 0 7px 14px rgba(61, 90, 254, 0.3);
+}
+
+/* Botón presionado */
+button.btn-primary:active {
+  transform: translateY(1px);
+}
+
+/* Texto de "Regístrate" inferior */
+.switch-text {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.switch-link {
+  color: #3d5afe; /* Azul Eléctrico */
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  margin-left: 5px;
+}
+
+.switch-link:hover {
+  color: #2a4bff;
+  text-decoration: underline;
+}
+
+/* Definición de la animación de entrada */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

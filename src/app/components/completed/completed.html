@@ -1,0 +1,47 @@
+<div class="completed-wrapper">
+  <header class="completed-header">
+    <div class="header-content">
+      <h1>Nuestros Recuerdos</h1>
+      <p>Momentos mágicos que hemos vivido juntos</p>
+    </div>
+  </header>
+
+  <main class="completed-main">
+    @if (loading) {
+      <div class="loader-container">
+        <div class="spinner"></div>
+        <p>Revelando vuestras fotos...</p>
+      </div>
+    } @else {
+      <div class="memory-grid">
+        @for (plan of completedplans; track plan.id) {
+          <article class="memory-card">
+            <div class="image-container">
+              <img [src]="plan.image_url" [alt]="plan.title" loading="lazy">
+              
+              <div class="glass-date-badge">
+                <span class="calendar-icon">📅</span>
+                {{ plan.completed_at | date:'dd MMM, yyyy' }}
+              </div>
+            </div>
+
+            <div class="memory-details">
+              <h3>{{ plan.title }}</h3>
+              <p>{{ plan.description || 'Sin descripción, el momento lo dijo todo.' }}</p>
+              <div class="card-footer">
+                <span class="couple-tag">💙 Juntos</span>
+              </div>
+            </div>
+          </article>
+        } @empty {
+          <div class="empty-album">
+            <div class="empty-icon">🖼️</div>
+            <h2>Vuestro álbum está esperando...</h2>
+            <p>Completad vuestro primer plan para guardar aquí vuestro primer recuerdo.</p>
+            <button routerLink="/dashboard" class="btn-primary">Ir a planes</button>
+          </div>
+        }
+      </div>
+    }
+  </main>
+</div>

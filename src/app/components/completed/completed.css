@@ -1,0 +1,181 @@
+/* --- Estilos Generales y Layout --- */
+.completed-wrapper {
+  min-height: 100vh;
+  background-color: #f8faff;
+  padding-bottom: 60px;
+}
+
+.completed-header {
+  background: linear-gradient(135deg, var(--primary-blue), #1a237e);
+  color: #3d5afe;
+  padding: 60px 20px;
+  text-align: center;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  box-shadow: 0 10px 20px rgba(61, 90, 254, 0.2);
+  margin-bottom: 50px;
+}
+
+.completed-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* --- Grid de Recuerdos --- */
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+/* --- Tarjeta de Memoria --- */
+.memory-card {
+  background: white;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(0,0,0,0.03);
+}
+
+.memory-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(61, 90, 254, 0.15);
+}
+
+/* --- Contenedor de Imagen --- */
+.image-container {
+  position: relative;
+  height: 280px;
+  overflow: hidden;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.memory-card:hover .image-container img {
+  transform: scale(1.1);
+}
+
+/* --- Badge de Fecha (Efecto Cristal) --- */
+.glass-date-badge {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  padding: 8px 15px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1a237e;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* --- Información de la Tarjeta --- */
+.memory-details {
+  padding: 20px;
+}
+
+.memory-details h3 {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+  font-size: 1.25rem;
+}
+
+.memory-details p {
+  color: #7f8c8d;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid #f1f4f8;
+}
+
+.couple-tag {
+  background: rgba(61, 90, 254, 0.1);
+  color: #3d5afe;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- Estados de Carga y Vacío --- */
+.loader-container {
+  text-align: center;
+  padding: 100px 0;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #e0e0e0;
+  border-top: 5px solid #3d5afe;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.empty-album {
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.btn-primary {
+  background: #3d5afe;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: 0.3s;
+}
+
+.btn-primary:hover {
+  background: #1a237e;
+  box-shadow: 0 5px 15px rgba(61, 90, 254, 0.4);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .memory-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .completed-header h1 {
+    font-size: 1.8rem;
+  }
+}

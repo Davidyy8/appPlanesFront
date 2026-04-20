@@ -1,0 +1,37 @@
+<div class="couple-wrapper">
+  <div class="couple-container" *ngIf="coupleData">
+    <header class="header">
+      <h1>Nuestra Conexión ⚡</h1>
+      <p>Pareja</p>
+    </header>
+
+    <div class="connection-visual">
+      <div class="user-bubble me">
+        <div class="avatar">👤</div>
+        <span>Tú</span>
+        <h3>{{ myUsername }}</h3>
+      </div>
+
+      <div class="connector">
+        <div class="heart-pulse">❤️</div>
+        <div class="line"></div>
+      </div>
+
+      <div class="user-bubble partner">
+        <div class="avatar">💖</div>
+        <span>Compañer@</span>
+        <h3>
+          {{ coupleData.members[0].username === myUsername ? 
+             coupleData.members[1]?.username : coupleData.members[0].username }}
+          <span *ngIf="coupleData.members.length < 2">Esperando...</span>
+        </h3>
+      </div>
+    </div>
+
+    <footer class="footer-info">
+      <div class="info-card">
+        <p>Habéis creado esta conexión para compartir planes y momentos inolvidables.</p>
+      </div>
+    </footer>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="login-container">
+  <div class="login-card animate-in">
+    <h2>Iniciar Sesión</h2>
+    <div class="input-group">
+      <input type="text" [(ngModel)]="username" placeholder="Usuario">
+      <input type="password" [(ngModel)]="password" placeholder="Contraseña">
+    </div>
+    <button class="btn-primary" (click)="handleLogin()">Entrar</button>
+    <p class="switch-text">
+      ¿No tienes cuenta? <a routerLink="/register" class="switch-link">Regístrate aquí</a>
+    </p>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 0.8rem 10%;
+  box-shadow: 0 4px 20px rgba(61, 90, 254, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid #e8eaf6;
+}
+
+/* Logo */
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.4rem;
+}
+.logo-text { color: #2c3e50; }
+.logo-text b { color: #3d5afe; } /* Azul Eléctrico */
+
+/* Enlaces */
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #7f8c8d;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+/* Efecto cuando la ruta está activa */
+.nav-links a.active {
+  color: #3d5afe;
+  background-color: rgba(61, 90, 254, 0.08);
+}
+
+.nav-links a:hover {
+  color: #3d5afe;
+}
+
+/* Botón de Logout */
+.logout-button {
+  background: transparent;
+  color: #ff4757;
+  border: 2px solid #ff4757;
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-button:hover {
+  background: #ff4757;
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+}
