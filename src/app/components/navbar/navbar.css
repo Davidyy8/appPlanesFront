@@ -1,12 +1,12 @@
-/* Estilos generales */
+/* --- Estilos Base y Escritorio --- */
 .navbar {
-  background-color: #3d5afe;
+  background-color: #3d5afe; /* El azul que usas */
   color: white;
-  padding: 1rem 0;
+  padding: 0.8rem 0;
   position: sticky;
   top: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 2000;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
 }
 
 .nav-container {
@@ -19,45 +19,81 @@
 }
 
 .nav-logo {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.4rem;
+  font-weight: 800;
   text-decoration: none;
   color: white;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 25px;
 }
 
 .nav-links a {
-  color: white;
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   font-weight: 500;
-  transition: opacity 0.3s;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  padding: 5px 0;
 }
 
 .nav-links a:hover, .nav-links a.active {
-  opacity: 0.8;
-  border-bottom: 2px solid white;
+  color: white;
+  border-bottom: 2px solid #ff4081; /* Un toque rosa para resaltar */
 }
 
-/* Botón Hamburguesa - Oculto en escritorio */
+/* Info de Usuario y Botones */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-left: 10px;
+  padding-left: 20px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-logout {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid white;
+  color: white;
+  padding: 6px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.3s;
+}
+
+.btn-logout:hover {
+  background-color: white;
+  color: #3d5afe;
+}
+
+.btn-register {
+  background-color: #ff4081;
+  color: white !important;
+  padding: 8px 20px !important;
+  border-radius: 25px;
+  border-bottom: none !important;
+}
+
+/* --- BOTÓN HAMBURGUESA --- */
 .menu-toggle {
-  display: none;
+  display: none; /* Oculto en PC */
   flex-direction: column;
-  justify-content: space-between;
-  width: 30px;
-  height: 21px;
+  justify-content: space-around;
+  width: 28px;
+  height: 20px;
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
-  z-index: 1100;
+  z-index: 2100;
 }
 
 .bar {
@@ -65,45 +101,48 @@
   height: 3px;
   background-color: white;
   border-radius: 10px;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-in-out;
 }
 
-/* --- DISEÑO MÓVIL (Media Query) --- */
+/* --- RESPONSIVE (Móvil) --- */
 @media (max-width: 768px) {
   .menu-toggle {
-    display: flex; /* Aparece en móvil */
+    display: flex; /* Mostrar en móvil */
   }
 
-  /* Animación de la hamburguesa a X cuando se abre */
-  .menu-toggle.open .bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+  /* Animación X de la hamburguesa */
+  .menu-toggle.open .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
   .menu-toggle.open .bar:nth-child(2) { opacity: 0; }
   .menu-toggle.open .bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
   .nav-links {
-    display: none; /* Se oculta por defecto */
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
+    right: -100%; /* Escondido a la derecha */
+    width: 80%; /* Ocupa casi toda la pantalla */
     height: 100vh;
     background-color: #3d5afe;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    gap: 30px;
-    font-size: 1.2rem;
+    gap: 40px;
+    transition: 0.4s ease-in-out;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.2);
   }
 
   .nav-links.active {
-    display: flex; /* Se muestra al pulsar el botón */
+    right: 0; /* Entra a la pantalla */
   }
 
   .user-info {
     flex-direction: column;
-    gap: 15px;
+    border-left: none;
     border-top: 1px solid rgba(255,255,255,0.2);
-    padding-top: 20px;
-    width: 80%;
-    text-align: center;
+    padding: 20px 0 0 0;
+    margin: 0;
+    width: 70%;
+  }
+
+  .nav-links a {
+    font-size: 1.2rem;
   }
 }
