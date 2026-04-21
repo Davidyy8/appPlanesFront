@@ -1,41 +1,60 @@
 <div class="connect-wrapper">
-  <div class="connect-card glass">
-    <h1>Vínculo de Pareja 💙</h1>
-    <p class="subtitle">Conéctate para empezar a crear planes juntos</p>
+  <div class="connect-container">
+    <header class="connect-header">
+      <div class="heart-icon">💖</div>
+      <h1>Crea vuestro vínculo</h1>
+      <p>Para empezar vuestra aventura, conéctate con tu pareja</p>
+    </header>
 
-    <div class="sections-container">
-      
-      <div class="action-box">
-        <h3>Opción 1: Generar código</h3>
-        <p>Dale este código a tu pareja para que lo introduzca en su cuenta.</p>
-        
-        @if (!generatedCode) {
-          <button class="btn-electric" (click)="generateNewCode()">Generar Nuevo Código</button>
-        } @else {
-          <div class="code-display">
-            <span class="code">{{ generatedCode }}</span>
-            <div class="loader-dots">
-              <span></span><span></span><span></span>
+    <div class="connect-grid">
+      <section class="connect-card">
+        <div class="card-body">
+          <h3>Proporciona un código</h3>
+          <p>Genera un código único y compártelo con tu pareja.</p>
+          
+          @if (!generatedCode()) {
+            <button class="btn-primary" (click)="generateNewCode()" [disabled]="isLoading()">
+              {{ isLoading() ? 'Generando...' : 'Generar Código' }}
+            </button>
+          } @else {
+            <div class="generated-box pulse">
+              <span class="label">TU CÓDIGO</span>
+              <span class="code-text">{{ generatedCode() }}</span>
+              <div class="status-indicator">
+                <div class="spinner-mini"></div>
+                <span>Esperando a tu pareja...</span>
+              </div>
             </div>
-            <p class="waiting-text">Esperando a que tu pareja se conecte...</p>
-          </div>
-        }
-      </div>
-
-      <div class="divider"><span>O</span></div>
-
-      <div class="action-box">
-        <h3>Opción 2: Tengo un código</h3>
-        <p>Introduce el código que ha generado tu pareja.</p>
-        
-        <div class="input-group">
-          <input type="text" [(ngModel)]="invitationCode" placeholder="Ej: A1B2C3" maxlength="10">
-          <button class="btn-outline" (click)="vincularPareja()" [disabled]="!invitationCode">
-            Conectar ahora
-          </button>
+          }
         </div>
+      </section>
+
+      <div class="divider">
+        <span>O</span>
       </div>
 
+      <section class="connect-card">
+        <div class="card-body">
+          <h3>Tengo un código</h3>
+          <p>Introduce el código que ha generado tu pareja.</p>
+          
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              [ngModel]="invitationCode()" 
+              (ngModelChange)="invitationCode.set($event.toUpperCase())" 
+              placeholder="Ej: AB123C"
+              maxlength="10"
+              class="code-input">
+            
+            <button class="btn-electric" 
+                    (click)="vincularPareja()" 
+                    [disabled]="!invitationCode().trim()">
+              Conectar Ahora
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </div>

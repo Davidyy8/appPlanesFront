@@ -1,30 +1,42 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { LoginService } from '../../services/login.service';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [FormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class LoginComponent {
-  username = '';
-  password = '';
+  // Signals para capturar las credenciales
+  username = signal<string>('');
+  password = signal<string>('');
+  isLoading = signal<boolean>(false);
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  private loginService = inject(LoginService);
+  private router = inject(Router);
 
   handleLogin() {
-    this.loginService.login(this.username, this.password).subscribe({
+    if (!this.username() || !this.password()) return;
+
+    this.isLoading.set(true);
+    this.loginService.login(this.username(), this.password()).subscribe({
       next: (user) => {
-        if (user.couple_id) {
+        this.isLoading.set(false);
+        // Redirección inteligente
+        if (user.couple_id && user.couple_id !== 0) {
           this.router.navigate(['/dashboard']);
         } else {
           this.router.navigate(['/connect']);
         }
       },
-      error: () => alert('Usuario o contraseña incorrectos')
+      error: () => {
+        this.isLoading.set(false);
+        alert('Usuario o contraseña incorrectos ❌');
+      }
     });
   }
 }

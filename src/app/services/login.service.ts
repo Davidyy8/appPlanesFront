@@ -16,7 +16,10 @@ export interface UserResponse {
 
 export class LoginService {
 
-    private baseUrl = 'http://127.0.0.1:8000'
+    // private baseUrl = 'http://127.0.0.1:8000'
+    private baseUrl = 'https://api-pareja.onrender.com';
+
+
     constructor (private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {  }
 
     register(username: string, password: string): Observable<UserResponse> {

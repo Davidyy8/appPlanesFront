@@ -1,8 +1,9 @@
-import { Component, OnInit, inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api';
 import { LoginService } from '../../services/login.service';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,71 +12,112 @@ import { LoginService } from '../../services/login.service';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class DashboardComponent implements OnInit {
-  planes: any[] = [];
+export class DashboardComponent implements OnInit, OnDestroy {
+  // Signals para reactividad moderna
+  planes = signal<any[]>([]);
+  coupleId = signal<number | null>(null);
+  isLoading = signal<boolean>(false);
+  
+  // Estado del formulario
   nuevoPlan = { title: '', description: '', couple_id: 0 };
-  coupleId: number | null = null;
   selectedFile: File | null = null;
+  selectedFileId: number | null = null; // Corregido: para saber qué plan tiene la foto
+  userId: number | null = null;
 
-  // Inyectamos las herramientas necesarias
+  private pollingSub?: Subscription;
   private platformId = inject(PLATFORM_ID);
-  private cdr = inject(ChangeDetectorRef);
-
-  constructor(private api: ApiService, private loginService: LoginService) {}
+  private api = inject(ApiService);
+  private loginService = inject(LoginService);
 
   ngOnInit(): void {
-    // Solo accedemos a datos de sesión si estamos en el navegador
     if (isPlatformBrowser(this.platformId)) {
-      this.coupleId = this.loginService.getCoupleId();
-      if (this.coupleId) {
-        this.nuevoPlan.couple_id = this.coupleId;
+      this.userId = this.loginService.getUserId();
+      const id = this.loginService.getCoupleId();
+      
+      if (id && id !== 0) {
+        this.coupleId.set(id);
+        this.nuevoPlan.couple_id = id;
         this.cargarPlanes();
+        this.iniciarRadarPlanes();
+      } else {
+        this.iniciarRadarPareja();
       }
     }
   }
 
-  cargarPlanes() {
-    if (!this.coupleId) return;
+  iniciarRadarPareja() {
+    this.pollingSub = interval(5000).subscribe(() => {
+      if (this.userId) {
+        this.api.getUserStatus(this.userId).subscribe(res => {
+          if (res.couple_id && res.couple_id !== 0) {
+            localStorage.setItem('couple_id', res.couple_id.toString());
+            this.coupleId.set(res.couple_id);
+            this.nuevoPlan.couple_id = res.couple_id;
+            this.pollingSub?.unsubscribe();
+            this.cargarPlanes();
+            this.iniciarRadarPlanes();
+          }
+        });
+      }
+    });
+  }
 
-    this.api.getPendingPlanes(this.coupleId).subscribe({
-      next: (res) => {
-        this.planes = res;
-        // 💡 Forzamos la detección de cambios para evitar el error NG0100
-        this.cdr.detectChanges();
-      },
-      error: (err) => console.error('Error al cargar planes:', err)
+  iniciarRadarPlanes() {
+    // Actualiza la lista cada 15 segundos por si tu pareja añade algo
+    this.pollingSub = interval(15000).subscribe(() => this.cargarPlanes());
+  }
+
+  cargarPlanes() {
+    const id = this.coupleId();
+    if (!id) return;
+    this.api.getPendingPlanes(id).subscribe({
+      next: (res) => this.planes.set(res),
+      error: (err) => console.error('Error:', err)
     });
   }
 
   crearPlan() {
     if (!this.nuevoPlan.title.trim()) return;
-
     this.api.crearPlan(this.nuevoPlan).subscribe({
-      next: () => {
+      next: (plan) => {
+        this.planes.update(p => [...p, plan]);
         this.nuevoPlan.title = '';
         this.nuevoPlan.description = '';
-        this.cargarPlanes();
-      },
-      error: (err) => console.error('Error al crear plan:', err)
+      }
     });
   }
 
-  onFileSelected(event: any) {
+  onFileSelected(event: any, planId: number) {
     this.selectedFile = event.target.files[0];
+    this.selectedFileId = planId;
   }
 
   completarPlan(planId: number) {
-    if (!this.selectedFile) {
-      alert('Por favor, selecciona una foto primero 📸');
+    if (!this.selectedFile || this.selectedFileId !== planId) {
+      alert('Selecciona una foto para este plan 📸');
       return;
     }
-
+    this.isLoading.set(true);
     this.api.completePlan(planId, this.selectedFile).subscribe({
       next: () => {
         this.selectedFile = null;
-        this.cargarPlanes(); // Al recargar, este plan ya no saldrá (porque es pending)
+        this.selectedFileId = null;
+        this.cargarPlanes();
+        this.isLoading.set(false);
       },
-      error: (err) => console.error("Error al completar plan", err)
+      error: () => this.isLoading.set(false)
     });
+  }
+
+  eliminarPlan(planId: number) {
+    if (confirm('¿Quieres borrar este plan? 🗑️')) {
+      this.api.eliminarPlan(planId).subscribe({
+        next: () => this.planes.update(p => p.filter(item => item.id !== planId))
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.pollingSub?.unsubscribe();
   }
 }

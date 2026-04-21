@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core'; // 1. Importa ChangeDetectorRef
+import { Component, OnInit, inject, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ApiService } from '../../services/api';
 
@@ -10,14 +10,13 @@ import { ApiService } from '../../services/api';
   styleUrl: './completed.css',
 })
 export class CompletedComponent implements OnInit {
-  completedplans: any[] = [];
-  coupleId: number | null = null;
-  loading: boolean = true;
-
+  // Signals: la fuente de la verdad para la vista
+  completedplans = signal<any[]>([]);
+  loading = signal<boolean>(true);
+  
+  private coupleId: number | null = null;
   private platformId = inject(PLATFORM_ID);
-  private cdr = inject(ChangeDetectorRef); // 2. Inyecta el detector de cambios
-
-  constructor(private apiService: ApiService) {}
+  private apiService = inject(ApiService);
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -30,18 +29,17 @@ export class CompletedComponent implements OnInit {
   }
 
   loadComplete() {
-    this.apiService.getCompletedPlanes(this.coupleId!).subscribe({
+    if (!this.coupleId) return;
+
+    this.apiService.getCompletedPlanes(this.coupleId).subscribe({
       next: (res) => {
-        this.completedplans = res;
-        this.loading = false;
-        
-        // 3. Forzamos la detección de cambios para que Angular sepa 
-        // que la longitud de la lista ha cambiado de 6 a 7 (o lo que sea)
-        this.cdr.detectChanges(); 
+        // Actualizamos los signals
+        this.completedplans.set(res);
+        this.loading.set(false);
       },
       error: (err) => {
-        this.loading = false;
-        console.error(err);
+        this.loading.set(false);
+        console.error('Error al cargar recuerdos:', err);
       }
     });
   }

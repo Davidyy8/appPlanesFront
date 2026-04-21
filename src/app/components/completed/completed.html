@@ -1,44 +1,35 @@
 <div class="completed-wrapper">
   <header class="completed-header">
-    <div class="header-content">
-      <h1>Nuestros Recuerdos</h1>
-      <p>Momentos mágicos que hemos vivido juntos</p>
-    </div>
+    <h1>Recuerdos con Mi Amor</h1>
+    <p>Momentos inolvidables que hemos compartido</p>
   </header>
 
-  <main class="completed-main">
-    @if (loading) {
-      <div class="loader-container">
+  <main class="completed-content">
+    @if (loading()) {
+      <div class="loader-box">
         <div class="spinner"></div>
-        <p>Revelando vuestras fotos...</p>
+        <p>Revelando vuestras memorias...</p>
       </div>
     } @else {
       <div class="memory-grid">
-        @for (plan of completedplans; track plan.id) {
-          <article class="memory-card">
-            <div class="image-container">
+        @for (plan of completedplans(); track plan.id) {
+          <article class="polaroid-card">
+            <div class="image-frame">
               <img [src]="plan.image_url" [alt]="plan.title" loading="lazy">
-              
-              <div class="glass-date-badge">
-                <span class="calendar-icon">📅</span>
-                {{ plan.completed_at | date:'dd MMM, yyyy' }}
+              <div class="date-tag">
+                {{ plan.completed_at | date:'dd/MM/yyyy' }}
               </div>
             </div>
-
-            <div class="memory-details">
+            <div class="card-text">
               <h3>{{ plan.title }}</h3>
-              <p>{{ plan.description || 'Sin descripción, el momento lo dijo todo.' }}</p>
-              <div class="card-footer">
-                <span class="couple-tag">💙 Juntos</span>
-              </div>
+              <p>{{ plan.description || 'Un día para recordar...' }}</p>
             </div>
           </article>
         } @empty {
-          <div class="empty-album">
-            <div class="empty-icon">🖼️</div>
-            <h2>Vuestro álbum está esperando...</h2>
-            <p>Completad vuestro primer plan para guardar aquí vuestro primer recuerdo.</p>
-            <button routerLink="/dashboard" class="btn-primary">Ir a planes</button>
+          <div class="empty-state">
+            <div class="icon">✨</div>
+            <h2>Vuestro álbum está vacío</h2>
+            <p>Completad vuestro primer plan para verlo aquí.</p>
           </div>
         }
       </div>

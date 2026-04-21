@@ -1,37 +1,23 @@
-@if (isLogged()) {
-  <nav class="navbar-container">
-    <div class="nav-brand">
-      <span class="logo-icon">✨</span>
-      <span class="logo-text">Planes<b>Match</b></span>
-    </div>
+<nav class="navbar">
+  <div class="nav-container">
+    <a routerLink="/dashboard" class="nav-logo">
+      <span>💑</span> Planes
+    </a>
 
-    <ul class="nav-links">
-      <li>
-        <a routerLink="/connect" routerLinkActive="active">
-            Conectar
-        </a>
-      </li>
-      <li>
-        <a routerLink="/dashboard" routerLinkActive="active">
-            Planes
-        </a>
-      </li>
-      <li>
-        <a routerLink="/completed" routerLinkActive="active">
-            Recuerdos
-        </a>
-      </li>
-      <li>
-        <a routerLink="/couple" routerLinkActive="active">
-            Mi Pareja
-        </a>
-      </li>
-    </ul>
-
-    <div class="nav-actions">
-      <button class="logout-button" (click)="logout()">
-        Cerrar Sesión
-      </button>
+    <div class="nav-links">
+      @if (isLogged()) {
+        <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        <a routerLink="/completed" routerLinkActive="active">Recuerdos</a>
+        <a routerLink="/couple" routerLinkActive="active">Mi Pareja</a>
+        
+        <div class="user-info">
+          <span class="user-name">Hola, <strong>{{ username() }}</strong></span>
+          <button class="btn-logout" (click)="logout()">Salir</button>
+        </div>
+      } @else {
+        <a routerLink="/login" routerLinkActive="active">Entrar</a>
+        <a routerLink="/register" class="btn-register">Empezar</a>
+      }
     </div>
-  </nav>
-}
+  </div>
+</nav>

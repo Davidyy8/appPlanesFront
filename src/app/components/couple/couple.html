@@ -1,37 +1,46 @@
 <div class="couple-wrapper">
-  <div class="couple-container" *ngIf="coupleData">
-    <header class="header">
-      <h1>Nuestra Conexión ⚡</h1>
-      <p>Pareja</p>
-    </header>
+  @if (coupleData()) {
+    <div class="couple-card glass">
+      <header class="card-header">
+        <span class="badge">Vínculo Activo</span>
+        <h1>Nuestra Conexión ⚡</h1>
+      </header>
 
-    <div class="connection-visual">
-      <div class="user-bubble me">
-        <div class="avatar">👤</div>
-        <span>Tú</span>
-        <h3>{{ myUsername }}</h3>
+      <div class="connection-display">
+        <div class="user-profile">
+          <div class="avatar-circle me">
+            <span class="emoji">👤</span>
+          </div>
+          <span class="label">Tú</span>
+          <h3>{{ myUsername() }}</h3>
+        </div>
+
+        <div class="connector-path">
+          <div class="pulse-heart">❤️</div>
+          <div class="animated-line"></div>
+        </div>
+
+        <div class="user-profile">
+          <div class="avatar-circle partner">
+            <span class="emoji">💖</span>
+          </div>
+          <span class="label">Pareja</span>
+          <h3>
+            {{ coupleData().members[0].username === myUsername() ? 
+               (coupleData().members[1]?.username || 'Buscando...') : 
+               coupleData().members[0].username }}
+          </h3>
+        </div>
       </div>
 
-      <div class="connector">
-        <div class="heart-pulse">❤️</div>
-        <div class="line"></div>
-      </div>
-
-      <div class="user-bubble partner">
-        <div class="avatar">💖</div>
-        <span>Compañer@</span>
-        <h3>
-          {{ coupleData.members[0].username === myUsername ? 
-             coupleData.members[1]?.username : coupleData.members[0].username }}
-          <span *ngIf="coupleData.members.length < 2">Esperando...</span>
-        </h3>
+      <div class="connection-footer">
+        <p>Habéis compartido planes y recuerdos desde que os conectasteis. <strong>Te amo</strong></p>
       </div>
     </div>
-
-    <footer class="footer-info">
-      <div class="info-card">
-        <p>Habéis creado esta conexión para compartir planes y momentos inolvidables.</p>
-      </div>
-    </footer>
-  </div>
+  } @else {
+    <div class="loading-state">
+      <div class="radar"></div>
+      <p>Sincronizando vuestro amor...</p>
+    </div>
+  }
 </div>

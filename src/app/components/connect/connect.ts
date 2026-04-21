@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api';
@@ -14,25 +14,23 @@ import { interval, Subscription } from 'rxjs';
   styleUrl: './connect.css'
 })
 export class ConnectComponent implements OnInit, OnDestroy {
-  invitationCode: string = ''; 
-  generatedCode: string | null = null; 
-  userId: number | null = null;
+  // Signals para el estado de la vista
+  invitationCode = signal<string>(''); 
+  generatedCode = signal<string | null>(null); 
+  isLoading = signal<boolean>(false);
   
-  private pollingSub?: Subscription; // El "radar"
+  private userId: number | null = null;
+  private pollingSub?: Subscription;
   private platformId = inject(PLATFORM_ID);
-  private cdr = inject(ChangeDetectorRef);
-
-  constructor(
-    private apiService: ApiService, 
-    private loginService: LoginService, 
-    private router: Router
-  ) {}
+  private apiService = inject(ApiService);
+  private loginService = inject(LoginService);
+  private router = inject(Router);
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.userId = this.loginService.getUserId();
       
-      // Si el usuario ya tiene pareja en el localStorage, mandarlo al dashboard directo
+      // Si ya hay pareja, no pintamos nada aquí, vamos directo al Dashboard
       const existingCoupleId = localStorage.getItem('couple_id');
       if (existingCoupleId && existingCoupleId !== '0' && existingCoupleId !== 'null') {
         this.router.navigate(['/dashboard']);
@@ -40,28 +38,30 @@ export class ConnectComponent implements OnInit, OnDestroy {
     }
   }
 
-  // ACCIÓN A: Generar código y empezar a escuchar
   generateNewCode() {
     if (this.userId) {
+      this.isLoading.set(true);
       this.apiService.generateCode(this.userId).subscribe({
         next: (res) => {
-          this.generatedCode = res.invitation_code;
-          this.iniciarRadarConexion(); // <--- Empezamos a preguntar si ya se unieron
-          this.cdr.detectChanges();
+          this.generatedCode.set(res.invitation_code);
+          this.isLoading.set(false);
+          this.iniciarRadarConexion(); // Empezamos a escuchar cambios
         },
-        error: (err) => alert('Error al generar código')
+        error: () => {
+          this.isLoading.set(false);
+          alert('Error al generar código');
+        }
       });
     }
   }
 
   iniciarRadarConexion() {
-    // Preguntamos cada 4 segundos si el usuario ya tiene un couple_id asignado
+    // Polling: cada 4 segundos preguntamos al servidor
     this.pollingSub = interval(4000).subscribe(() => {
       if (this.userId) {
         this.apiService.getUserStatus(this.userId).subscribe({
           next: (res) => {
             if (res.couple_id && res.couple_id !== 0) {
-              // ¡Bingo! La pareja metió el código
               localStorage.setItem('couple_id', res.couple_id.toString());
               this.pollingSub?.unsubscribe(); 
               this.router.navigate(['/dashboard']);
@@ -72,22 +72,20 @@ export class ConnectComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ACCIÓN B: Meter el código que generó la pareja (El usuario que NO genera el código)
   vincularPareja() {
-    if (this.userId && this.invitationCode) {
-      this.apiService.connectWithCode(this.userId, this.invitationCode).subscribe({
+    const code = this.invitationCode().trim();
+    if (this.userId && code) {
+      this.apiService.connectWithCode(this.userId, code).subscribe({
         next: (res) => {
           localStorage.setItem('couple_id', res.couple_id.toString());
           this.router.navigate(['/dashboard']);
         },
-        error: (err) => alert('Código inválido o ya caducado')
+        error: () => alert('Código inválido o ya caducado')
       });
     }
   }
 
   ngOnDestroy() {
-    if (this.pollingSub) {
-      this.pollingSub.unsubscribe();
-    }
+    this.pollingSub?.unsubscribe();
   }
 }

@@ -1,24 +1,35 @@
-import { Component, OnInit, inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common'; // Importante para el SSR
+import { Component, OnInit, inject, PLATFORM_ID, signal } from '@angular/core';
+import { isPlatformBrowser, CommonModule } from '@angular/common'; 
 import { LoginService } from '../../services/login.service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
 export class NavbarComponent implements OnInit {
-  // Inyectamos el ID de la plataforma
   private platformId = inject(PLATFORM_ID);
+  private router = inject(Router);
+  public loginService = inject(LoginService);
 
-  constructor(public loginService: LoginService, private router: Router) {}
+  // Signal para el nombre de usuario
+  username = signal<string | null>(null);
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.checkUser();
+  }
 
-  // Versión segura de isLogged
+  // Función para actualizar los datos del usuario logueado
+  checkUser() {
+    if (isPlatformBrowser(this.platformId)) {
+      const name = localStorage.getItem('username');
+      this.username.set(name);
+    }
+  }
+
   isLogged(): boolean {
     if (isPlatformBrowser(this.platformId)) {
       return !!localStorage.getItem('user_id');
@@ -26,10 +37,10 @@ export class NavbarComponent implements OnInit {
     return false;
   }
 
-  // Versión segura de logout
   logout() {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.clear();
+      this.username.set(null); // Limpiamos el signal
       this.router.navigate(['/login']);
     }
   }
