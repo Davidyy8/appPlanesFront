@@ -5,6 +5,7 @@ import { DashboardComponent } from './components/dashboard/dashboard';
 import { RegisterComponent } from './components/register/register';
 import { CompletedComponent } from './components/completed/completed';
 import { CoupleComponent } from './components/couple/couple';
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
     {
@@ -23,20 +24,24 @@ export const routes: Routes = [
     {
         path: 'connect',
         component: ConnectComponent,
+        canActivate: [authGuard]
 
     },
     {
         path: 'dashboard',
         component: DashboardComponent,
+        canActivate: [authGuard]
 
     },
     {
         path: 'completed',
-        component: CompletedComponent
+        component: CompletedComponent,
+        canActivate: [authGuard]
     },
     {
         path: 'couple',
-        component: CoupleComponent
+        component: CoupleComponent,
+        canActivate: [authGuard]
     },
     {
         path: '**',
