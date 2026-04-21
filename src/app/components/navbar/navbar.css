@@ -93,3 +93,26 @@
 @media (max-width: 768px) {
   .user-name { display: none; } /* En móvil ocultamos el texto para ahorrar espacio */
 }
+
+/* Añade esto al final de tu navbar.css */
+@media (max-width: 600px) {
+  .nav-container {
+    padding: 0 10px;
+  }
+  
+  .nav-logo span {
+    font-size: 1.2rem; /* Logo más pequeño */
+  }
+
+  .user-name {
+    display: none; /* Ocultamos "Hola, Nombre" para ganar espacio */
+  }
+
+  .nav-links {
+    gap: 10px; /* Reducimos el espacio entre botones */
+  }
+
+  .nav-links a {
+    font-size: 0.8rem; /* Letra más pequeña para que quepa todo */
+  }
+}

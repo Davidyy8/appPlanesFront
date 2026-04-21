@@ -112,3 +112,14 @@
 .register-footer a:hover {
   text-decoration: underline;
 }
+
+@media (max-width: 480px) {
+  .login-card, .register-card {
+    padding: 25px 20px; /* Menos padding interno */
+    width: 95%; /* Que casi toque los bordes del móvil */
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+}

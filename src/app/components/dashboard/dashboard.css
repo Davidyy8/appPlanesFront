@@ -144,3 +144,34 @@
   .plan-row-card { flex-direction: column; gap: 20px; text-align: center; }
   .plan-actions { width: 100%; justify-content: center; }
 }
+
+/* Añade esto al final de tu dashboard.css */
+@media (max-width: 600px) {
+  .dashboard-header {
+    padding: 40px 15px; /* Menos relleno arriba */
+  }
+
+  .dashboard-main {
+    margin-top: -20px; /* Ajustamos la posición */
+  }
+
+  .plan-row-card {
+    flex-direction: column; /* LOS PLANES PASAN A SER VERTICALES */
+    text-align: center;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .plan-actions {
+    width: 100%;
+    justify-content: space-around; /* Botones repartidos a lo ancho */
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+  }
+
+  .btn-finish, .btn-outline-photo {
+    flex: 1; /* Que los botones ocupen el mismo espacio */
+    font-size: 0.8rem;
+    padding: 10px 5px;
+  }
+}
