@@ -18,8 +18,21 @@ export class NavbarComponent implements OnInit {
   // Signal para el nombre de usuario
   username = signal<string | null>(null);
 
+  // Signal para controlar el estado del menú móvil
+  menuOpen = signal<boolean>(false);
+
   ngOnInit(): void {
     this.checkUser();
+  }
+
+  // Alternar el estado del menú (abrir/cerrar)
+  toggleMenu() {
+    this.menuOpen.update(value => !value);
+  }
+
+  // Cerrar el menú manualmente (útil al hacer click en links)
+  closeMenu() {
+    this.menuOpen.set(false);
   }
 
   // Función para actualizar los datos del usuario logueado
@@ -41,6 +54,7 @@ export class NavbarComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.clear();
       this.username.set(null); // Limpiamos el signal
+      this.closeMenu();        // Cerramos el menú si estaba abierto
       this.router.navigate(['/login']);
     }
   }
