@@ -11,7 +11,7 @@ import { ProfileComponent } from './components/profile/profile';
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: 'login',
+        redirectTo: 'dashboard',
         pathMatch: 'full'
     },
     {
