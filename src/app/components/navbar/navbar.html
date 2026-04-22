@@ -9,10 +9,12 @@
       <span class="bar"></span>
       <span class="bar"></span>
       <span class="bar"></span>
+      <span class="bar"></span>
     </button>
 
     <div class="nav-links" [class.active]="menuOpen()">
       @if (isLogged()) {
+        <a routerLink="/connect" routerLinkActive="active" (click)="closeMenu()">Conectar</a>
         <a routerLink="/dashboard" routerLinkActive="active" (click)="closeMenu()">Inicio</a>
         <a routerLink="/completed" routerLinkActive="active" (click)="closeMenu()">Recuerdos</a>
         <a routerLink="/couple" routerLinkActive="active" (click)="closeMenu()">Mi Pareja</a>

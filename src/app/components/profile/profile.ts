@@ -4,6 +4,7 @@ import { LoginService } from '../../services/login.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { SwPush } from '@angular/service-worker';
 
 @Component({
   selector: 'app-profile',
@@ -14,6 +15,8 @@ import { CommonModule } from '@angular/common';
 export class ProfileComponent implements OnInit{
   private loginService = inject(LoginService);
   private router = inject(Router);
+  private swPush = inject(SwPush);
+  private http = inject(HttpClient);
 
   username = '';
   profileImage = signal<string>('');
@@ -98,5 +101,35 @@ export class ProfileComponent implements OnInit{
       })
   }
 
+
+
+  // Notificacions 
+  readonly VAPID_PUBLIC_KEY = "BFllqSIDKkYLQBoXiGdfp-s6zMDmxRPxDlgTufkOVmjAXAXHvJB6DjE9vJq5g1LKslCvpq7UCpCVP1YHLEJD5Oo";
+suscribeUser() {
+  // 1. Obtén el ID del usuario (esto es un ejemplo, usa tu lógica de login)
+  const idDeTuUsuario = localStorage.getItem('user_id'); 
+
+  if (!idDeTuUsuario) {
+    console.error('No se encontró el ID del usuario');
+    return;
+  }
+
+  this.swPush.requestSubscription({
+    serverPublicKey: this.VAPID_PUBLIC_KEY
+  })
+  .then(sub => {
+    // 2. Pasamos el ID dinámicamente en la URL
+    this.http.post(`https://api-pareja.onrender.com/save-sub?user_id=${idDeTuUsuario}`, sub)
+      .subscribe({
+        next: () => {
+            console.log('Suscrito con éxito');
+            // Si quieres que después de suscribirse se mueva a otra pantalla:
+            this.router.navigate(['/dashboard']); 
+          },
+          error: (err) => console.error(err)
+        });
+  })
+  .catch(err => console.error('Error pidiendo permiso', err));
+}
 
 }
