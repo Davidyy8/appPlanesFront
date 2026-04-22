@@ -1,0 +1,55 @@
+<div class="profile-page">
+  
+  @if (loadingData()) {
+    <div class="initial-loader">
+      <span class="spinner-blue"></span>
+      <p>Cargando tus datos...</p>
+    </div>
+  } @else {
+    
+    <div class="profile-card">
+      <header class="profile-header">
+        <h2>Configuración</h2>
+        <p>Personaliza tu perfil de pareja</p>
+      </header>
+
+      <div class="avatar-section">
+        <div class="avatar-wrapper" (click)="fileInput.click()">
+          <img [src]="imagePreview || profileImage() || 'https://www.w3schools.com/howto/img_avatar.png'" alt="Perfil">
+          <div class="camera-icon">
+            <span>📷</span>
+          </div>
+        </div>
+        <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" hidden>
+        <p class="avatar-hint">Toca la imagen para cambiarla</p>
+      </div>
+
+      <div class="profile-form">
+        <div class="input-group">
+          <label for="username">Nombre de Usuario</label>
+          <div class="input-wrapper">
+            <span class="input-icon">👤</span>
+            <input 
+              type="text" 
+              id="username" 
+              [(ngModel)]="username" 
+              placeholder="¿Cómo te llamas?"
+            >
+          </div>
+        </div>
+
+        <button class="btn-save" (click)="saveProfile()" [disabled]="loading">
+          @if (!loading) {
+            <span>Guardar cambios</span>
+          } @else {
+            <span class="btn-spinner"></span>
+          }
+        </button>
+      </div>
+
+      <footer class="profile-footer">
+        <p>💑 Planes con mi Nenica</p>
+      </footer>
+    </div>
+
+  } </div>

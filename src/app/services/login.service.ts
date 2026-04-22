@@ -61,4 +61,24 @@ export class LoginService {
         localStorage.clear();
     }
 
+    updateProfile(userId: string, username?: string, file?: File): Observable<any> {
+    const formData = new FormData();
+
+    // Solo añadimos al FormData si los valores existen
+    if (username) {
+      formData.append('username', username);
+    }
+    
+    if (file) {
+      formData.append('file', file);
+    }
+
+    // Enviamos el PATCH al endpoint que creamos en FastAPI
+    return this.http.patch(`${this.baseUrl}/users/${userId}/update`, formData);
+  }
+
+  getUserProfile(userId: string): Observable<any> {
+  return this.http.get(`${this.baseUrl}/users/${userId}`);
 }
+}
+

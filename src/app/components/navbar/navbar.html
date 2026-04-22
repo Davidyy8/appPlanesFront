@@ -8,6 +8,7 @@
       <span class="bar"></span>
       <span class="bar"></span>
       <span class="bar"></span>
+      <span class="bar"></span>
     </button>
 
     <div class="nav-links" [class.active]="menuOpen()">
@@ -15,7 +16,7 @@
         <a routerLink="/dashboard" routerLinkActive="active" (click)="closeMenu()">Inicio</a>
         <a routerLink="/completed" routerLinkActive="active" (click)="closeMenu()">Recuerdos</a>
         <a routerLink="/couple" routerLinkActive="active" (click)="closeMenu()">Mi Pareja</a>
-        
+        <a routerLink="/profile" routerLinkActive="active" (click)="closeMenu()">Perfil</a>
         <div class="user-info">
           <span class="user-name">Hola, <strong>{{ username() }}</strong></span>
           <button class="btn-logout" (click)="logout()">Salir</button>

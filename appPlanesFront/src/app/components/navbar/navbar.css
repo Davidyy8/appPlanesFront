@@ -1,0 +1,148 @@
+/* --- Estilos Base y Escritorio --- */
+.navbar {
+  background-color: #3d5afe; /* El azul que usas */
+  color: white;
+  padding: 0.8rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.nav-logo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-decoration: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.nav-links a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  padding: 5px 0;
+}
+
+.nav-links a:hover, .nav-links a.active {
+  color: white;
+  border-bottom: 2px solid #ff4081; /* Un toque rosa para resaltar */
+}
+
+/* Info de Usuario y Botones */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-left: 10px;
+  padding-left: 20px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-logout {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid white;
+  color: white;
+  padding: 6px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.3s;
+}
+
+.btn-logout:hover {
+  background-color: white;
+  color: #3d5afe;
+}
+
+.btn-register {
+  background-color: #ff4081;
+  color: white !important;
+  padding: 8px 20px !important;
+  border-radius: 25px;
+  border-bottom: none !important;
+}
+
+/* --- BOTÓN HAMBURGUESA --- */
+.menu-toggle {
+  display: none; /* Oculto en PC */
+  flex-direction: column;
+  justify-content: space-around;
+  width: 28px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 2100;
+}
+
+.bar {
+  width: 100%;
+  height: 3px;
+  background-color: white;
+  border-radius: 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* --- RESPONSIVE (Móvil) --- */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: flex; /* Mostrar en móvil */
+  }
+
+  /* Animación X de la hamburguesa */
+  .menu-toggle.open .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .menu-toggle.open .bar:nth-child(2) { opacity: 0; }
+  .menu-toggle.open .bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Escondido a la derecha */
+    width: 80%; /* Ocupa casi toda la pantalla */
+    height: 100vh;
+    background-color: #3d5afe;
+    flex-direction: column;
+    justify-content: center;
+    gap: 40px;
+    transition: 0.4s ease-in-out;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+  }
+
+  .nav-links.active {
+    right: 0; /* Entra a la pantalla */
+  }
+
+  .user-info {
+    flex-direction: column;
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding: 20px 0 0 0;
+    margin: 0;
+    width: 70%;
+  }
+
+  .nav-links a {
+    font-size: 1.2rem;
+  }
+}

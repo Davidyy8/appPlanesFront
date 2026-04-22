@@ -10,26 +10,32 @@ import { ApiService } from '../../services/api';
   styleUrl: './couple.css'
 })
 export class CoupleComponent implements OnInit {
-  // Signals para manejar el estado de la conexión
-  coupleData = signal<any>(null);
-  myUsername = signal<string | null>(null);
+  // Signals para los dos miembros
+  myData = signal<any>(null);
+  partnerData = signal<any>(null);
   
   private platformId = inject(PLATFORM_ID);
   private api = inject(ApiService);
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      // Leemos los datos iniciales del localStorage
-      this.myUsername.set(localStorage.getItem('username'));
+      const myId = localStorage.getItem('user_id');
       const coupleId = localStorage.getItem('couple_id');
       
       if (coupleId && coupleId !== '0') {
         this.api.getCoupleInfo(parseInt(coupleId)).subscribe({
           next: (res) => {
-            // Actualizamos el signal con la info recibida
-            this.coupleData.set(res);
+            // 'res.members' es la lista que devuelve tu FastAPI
+            const members = res.members;
+
+            // Buscamos quién soy yo y quién es mi pareja en el array
+            const me = members.find((u: any) => u.id.toString() === myId);
+            const partner = members.find((u: any) => u.id.toString() !== myId);
+
+            this.myData.set(me);
+            this.partnerData.set(partner);
           },
-          error: (err) => console.error('Error al obtener info de pareja:', err)
+          error: (err) => console.error('Error al obtener info:', err)
         });
       }
     }

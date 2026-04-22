@@ -1,0 +1,41 @@
+<div class="register-wrapper">
+  <div class="register-card glass">
+    <header class="register-header">
+      <div class="icon">✨</div>
+      <h1>Registrate lil aceitunilla</h1>
+      <p>Crea tu cuenta para empezar a compartir planes</p>
+    </header>
+
+    <form (submit)="handleRegister()" class="register-form">
+      <div class="input-group">
+        <label>Nombre de usuario</label>
+        <input 
+          type="text" 
+          [ngModel]="username()" 
+          (ngModelChange)="username.set($event)" 
+          name="username"
+          placeholder="Elige un nombre de usuario"
+          required>
+      </div>
+
+      <div class="input-group">
+        <label>Contraseña</label>
+        <input 
+          type="password" 
+          [ngModel]="password()" 
+          (ngModelChange)="password.set($event)" 
+          name="password"
+          placeholder="Crea una contraseña segura"
+          required>
+      </div>
+
+      <button type="submit" class="btn-register" [disabled]="isLoading()">
+        {{ isLoading() ? 'Creando cuenta...' : 'Registrarse' }}
+      </button>
+    </form>
+
+    <footer class="register-footer">
+      <p>¿Ya tienes una cuenta? <a routerLink="/login">Inicia sesión</a></p>
+    </footer>
+  </div>
+</div>

@@ -6,6 +6,7 @@ import { RegisterComponent } from './components/register/register';
 import { CompletedComponent } from './components/completed/completed';
 import { CoupleComponent } from './components/couple/couple';
 import { authGuard } from './guards/auth-guard';
+import { ProfileComponent } from './components/profile/profile';
 
 export const routes: Routes = [
     {
@@ -41,6 +42,11 @@ export const routes: Routes = [
     {
         path: 'couple',
         component: CoupleComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'profile',
+        component: ProfileComponent,
         canActivate: [authGuard]
     },
     {
